@@ -1,8 +1,7 @@
-[package]
-name = "estimator"
-version = "0.1.0"
+[workspace]
+members = ["packages/*"]
+resolver = "2"
+
+[workspace.package]
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
+version = "0.1.0"
