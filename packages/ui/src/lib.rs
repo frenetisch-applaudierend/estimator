@@ -1,14 +1,29 @@
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
+use yew::prelude::*;
+
+#[derive(Clone, Properties, PartialEq)]
+pub struct AppProps {
+    pub title: String,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[function_component]
+pub fn App(props: &AppProps) -> Html {
+    let fallback = html! {<div>{"Loading..."}</div>};
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    let props = props.clone();
+
+    html! {
+        <Suspense {fallback}>
+            <Content ..props />
+        </Suspense>
     }
+}
+
+#[function_component]
+fn Content(props: &AppProps) -> HtmlResult {
+    let title = props.title.clone();
+    let title = use_prepared_state!((), |_| -> String { title })?.unwrap();
+
+    Ok(html! {
+        <h1>{ &*title }</h1>
+    })
 }
