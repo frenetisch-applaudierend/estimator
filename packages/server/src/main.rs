@@ -32,11 +32,14 @@ struct Opt {
 
 async fn render(
     url: Uri,
-    Query(queries): Query<HashMap<String, String>>,
+    Query(query): Query<HashMap<String, String>>,
     State((index_html_before, index_html_after)): State<(String, String)>,
 ) -> impl IntoResponse {
-    let renderer = yew::ServerRenderer::<ui::App>::with_props(move || ui::AppProps {
-        title: "Hello, Server!".to_string(),
+    let url = url.to_string();
+
+    let renderer = yew::ServerRenderer::<ui::ServerApp>::with_props(move || ui::ServerAppProps {
+        url: url.into(),
+        query,
     });
 
     StreamBody::new(

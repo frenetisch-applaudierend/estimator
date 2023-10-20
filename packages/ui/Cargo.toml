@@ -5,3 +5,4 @@ version.workspace = true
 
 [dependencies]
 yew = { version = "0.21", default-features = false }
+yew-router = { version = "0.18", default-features = false }

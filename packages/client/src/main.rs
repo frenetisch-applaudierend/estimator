@@ -1,8 +1,11 @@
-use ui::{App, AppProps};
+use ui::ClientApp;
 
 fn main() {
-    let props = AppProps {
-        title: "Hello, Client".to_string(),
-    };
-    yew::Renderer::<App>::with_props(props).hydrate();
+    let renderer = yew::Renderer::<ClientApp>::new();
+
+    if cfg!(profile = "release") {
+        renderer.hydrate();
+    } else {
+        renderer.render();
+    }
 }
