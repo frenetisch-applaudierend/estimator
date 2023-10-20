@@ -6,15 +6,14 @@ version.workspace = true
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-futures = "*"
-yew = { version = "0.21", features = ["ssr"] }
+axum = { version = "0.6", features = ["tracing"] }
+clap = { version = "4.4", features = ["derive"] }
+futures = { version = "0.3" }
 tokio = { version = "1.32.0", features = ["full"] }
-axum = "0.6"
-tower = { version = "0.4", features = ["make"] }
-tower-http = { version = "0.3", features = ["fs"] }
-env_logger = "0.10"
-clap = { version = "4", features = ["derive"] }
-hyper = { version = "0.14", features = ["server", "http1"] }
-jemallocator = "0.5"
+tower = { version = "0.4" }
+tower-http = { version = "0.3", features = ["fs", "trace"] }
+tracing = { version = "0.1" }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+yew = { version = "0.21", features = ["ssr"] }
 
 ui = { path = "../ui" }
