@@ -4,13 +4,13 @@ use clap::Parser;
 
 #[derive(Parser, Debug)]
 pub struct Options {
-    #[arg(short, long, default_value = "0.0.0.0")]
+    #[arg(long, default_value = "0.0.0.0")]
     pub host: String,
 
-    #[arg(short, long, default_value_t = 8080)]
+    #[arg(long, default_value_t = 8080)]
     pub port: u16,
 
-    #[arg(short, long)]
+    #[arg(long)]
     pub assets_dir: PathBuf,
 }
 
