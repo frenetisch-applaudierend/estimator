@@ -1,4 +1,4 @@
-use axum::Router;
+use poem::Route;
 
 mod cli;
 mod logging;
