@@ -13,9 +13,9 @@ pub fn Login() -> Html {
 
     let onlogin = Callback::from(move |_| {
         log::info!("Logging in...");
-        auth.login(User {
-            email: "markus.gasser@mailbox.org".to_string(),
-        });
+        // auth.login(User {
+        //     email: "markus.gasser@mailbox.org".to_string(),
+        // });
 
         nav.replace(&Route::Main);
     });

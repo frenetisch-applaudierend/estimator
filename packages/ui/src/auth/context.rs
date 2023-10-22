@@ -6,13 +6,11 @@ use crate::util::ServiceProp;
 
 pub trait AuthenticationHandler {
     fn get_user(&self) -> Option<User>;
-    fn set_user(&self, user: Option<User>);
 }
 
 #[derive(Clone)]
 pub struct AuthenticationContext {
     handler: Rc<dyn AuthenticationHandler>,
-    force_update_handle: UseForceUpdateHandle,
 }
 
 impl AuthenticationContext {
@@ -22,16 +20,6 @@ impl AuthenticationContext {
 
     pub fn current_user(&self) -> Option<User> {
         self.handler.get_user()
-    }
-
-    pub fn login(&self, user: User) {
-        self.handler.set_user(Some(user));
-        self.force_update_handle.force_update();
-    }
-
-    pub fn logout(&self) {
-        self.handler.set_user(None);
-        self.force_update_handle.force_update();
     }
 }
 
@@ -67,10 +55,8 @@ pub struct Props {
 
 #[function_component]
 pub fn AuthenticationProvider(props: &Props) -> Html {
-    let trigger = use_force_update();
     let context = AuthenticationContext {
         handler: props.handler.0.clone(),
-        force_update_handle: trigger,
     };
 
     html! {

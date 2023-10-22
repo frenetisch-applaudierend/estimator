@@ -38,8 +38,4 @@ impl AuthenticationHandler for ClientAuthenticationHandler {
     fn get_user(&self) -> Option<User> {
         self.user.borrow().clone()
     }
-
-    fn set_user(&self, user: Option<User>) {
-        self.user.replace(user);
-    }
 }
