@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::{cell::RefCell, rc::Rc};
 
 use ui::{
     auth::{AuthenticationHandler, User},
@@ -9,7 +9,7 @@ use ui::{
 fn main() {
     wasm_logger::init(wasm_logger::Config::default());
 
-    let auth_handler = ClientAuthenticationHandler;
+    let auth_handler = ClientAuthenticationHandler::new();
     let props = ClientAppProps {
         auth_handler: ServiceProp(Rc::new(auth_handler)),
     };
@@ -22,14 +22,24 @@ fn main() {
     }
 }
 
-struct ClientAuthenticationHandler;
+struct ClientAuthenticationHandler {
+    user: RefCell<Option<User>>,
+}
+
+impl ClientAuthenticationHandler {
+    pub fn new() -> Self {
+        Self {
+            user: RefCell::new(None),
+        }
+    }
+}
 
 impl AuthenticationHandler for ClientAuthenticationHandler {
     fn get_user(&self) -> Option<User> {
-        todo!()
+        self.user.borrow().clone()
     }
 
     fn set_user(&self, user: Option<User>) {
-        todo!()
+        self.user.replace(user);
     }
 }

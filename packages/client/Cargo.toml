@@ -7,5 +7,6 @@ version.workspace = true
 
 [dependencies]
 yew = { version = "0.21", features = ["csr", "hydration"] }
+wasm-logger = { version = "0.2" }
+
 ui = { path = "../ui" }
-wasm-logger = "0.2.0"
