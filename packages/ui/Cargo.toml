@@ -4,5 +4,6 @@ edition.workspace = true
 version.workspace = true
 
 [dependencies]
+log = "0.4.20"
 yew = { version = "0.21", default-features = false }
 yew-router = { version = "0.18", default-features = false }

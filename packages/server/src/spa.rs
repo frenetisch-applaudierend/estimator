@@ -19,8 +19,13 @@ pub struct SpaEndpoint {
 }
 
 impl SpaEndpoint {
-    pub fn new(assets_dir: impl Into<PathBuf>) -> std::io::Result<Self> {
+    pub fn setup(assets_dir: impl Into<PathBuf>) -> std::io::Result<Self> {
         let assets_dir = assets_dir.into();
+
+        tracing::debug!(
+            "Loading index.html from assets directory '{}'",
+            assets_dir.display()
+        );
 
         let index_html = std::fs::read_to_string(assets_dir.join("index.html"))?;
         let body_start = index_html.find("<body>").ok_or(Error::new(

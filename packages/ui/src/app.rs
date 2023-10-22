@@ -6,12 +6,17 @@ use yew_router::{
     prelude::*,
 };
 
-use crate::pages;
+use crate::{auth::AuthenticationHandler, pages};
+use crate::{
+    auth::{AuthenticationProvider, Protected},
+    util::ServiceProp,
+};
 
-#[derive(Properties, PartialEq, Eq, Debug)]
+#[derive(Properties, PartialEq)]
 pub struct ServerAppProps {
     pub url: AttrValue,
     pub query: HashMap<String, String>,
+    pub auth_handler: ServiceProp<dyn AuthenticationHandler>,
 }
 
 #[function_component]
@@ -22,18 +27,27 @@ pub fn ServerApp(props: &ServerAppProps) -> Html {
         .expect("Could not create history on server");
 
     html! {
-        <Router history={history}>
-          <AppContent />
-        </Router>
+        <AuthenticationProvider handler={props.auth_handler.clone()}>
+            <Router history={history}>
+                <AppContent />
+            </Router>
+        </AuthenticationProvider>
     }
 }
 
+#[derive(Properties, PartialEq)]
+pub struct ClientAppProps {
+    pub auth_handler: ServiceProp<dyn AuthenticationHandler>,
+}
+
 #[function_component]
-pub fn ClientApp() -> Html {
+pub fn ClientApp(props: &ClientAppProps) -> Html {
     html! {
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
+        <AuthenticationProvider handler={props.auth_handler.clone()}>
+            <BrowserRouter>
+                <AppContent />
+            </BrowserRouter>
+        </AuthenticationProvider>
     }
 }
 
@@ -51,13 +65,22 @@ pub enum Route {
     #[at("/")]
     Main,
 
+    #[at("/auth/login")]
+    Login,
+
     #[at("/sub")]
     Sub,
+
+    #[not_found]
+    #[at("/error/404")]
+    NotFound,
 }
 
 fn switch(route: Route) -> Html {
     match route {
         Route::Main => html! { <pages::Main /> },
-        Route::Sub => html! { <pages::Sub /> },
+        Route::Login => html! { <pages::auth::Login /> },
+        Route::Sub => html! { <Protected><pages::Sub /></Protected> },
+        Route::NotFound => html! { "Page not found" },
     }
 }
