@@ -3,6 +3,7 @@ use std::{
     convert::Infallible,
     io::{Error, ErrorKind},
     path::PathBuf,
+    rc::Rc,
 };
 
 use futures::StreamExt;
@@ -11,6 +12,7 @@ use poem::{
     http::{StatusCode, Uri},
     Body, Endpoint, Request, Response, Result,
 };
+use ui::{auth::AuthenticationHandler, util::ServiceProp};
 
 pub struct SpaEndpoint {
     static_files: StaticFilesEndpoint,
@@ -52,6 +54,7 @@ impl SpaEndpoint {
             yew::ServerRenderer::<ui::ServerApp>::with_props(move || ui::ServerAppProps {
                 url: url.into(),
                 query,
+                auth_handler: ServiceProp(Rc::new(DummyAuthHandler)),
             });
 
         let prefix: std::result::Result<String, Infallible> = Ok(self.index_html_prefix.clone());
@@ -87,5 +90,13 @@ impl Endpoint for SpaEndpoint {
                 _ => Err(err),
             },
         }
+    }
+}
+
+struct DummyAuthHandler;
+
+impl AuthenticationHandler for DummyAuthHandler {
+    fn get_user(&self) -> Option<ui::auth::User> {
+        None
     }
 }
