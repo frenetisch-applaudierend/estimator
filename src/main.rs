@@ -6,7 +6,7 @@ use axum::{
     Router,
 };
 use sailfish::TemplateOnce;
-use tower_http::{services::ServeDir, trace::TraceLayer};
+use tower_http::{services::ServeDir, trace::TraceLayer, compression::CompressionLayer};
 
 mod logging;
 
@@ -17,7 +17,8 @@ async fn main() -> Result<(), impl Error> {
     let app = Router::new()
         .nest_service("/assets", ServeDir::new("assets"))
         .route("/", get(hello))
-        .layer(TraceLayer::new_for_http());
+        .layer(TraceLayer::new_for_http())
+        .layer(CompressionLayer::new());
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     tracing::info!("listening on {}", addr);

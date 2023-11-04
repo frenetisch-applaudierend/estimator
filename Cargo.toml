@@ -9,6 +9,6 @@ axum-extra = "0.8.0"
 clap = { version = "4.4.7", features = ["derive"] }
 sailfish = "0.8.3"
 tokio = { version = "1.33.0", features = ["full", "tracing"] }
-tower-http = { version = "0.4.4", features = ["fs", "tracing", "trace"] }
+tower-http = { version = "0.4.4", features = ["fs", "tracing", "trace", "compression-full"] }
 tracing = { version = "0.1.40", features = ["log"] }
 tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
