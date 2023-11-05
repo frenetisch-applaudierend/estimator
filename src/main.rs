@@ -1,14 +1,10 @@
 use std::{error::Error, net::SocketAddr};
 
-use axum::{
-    response::{Html, IntoResponse},
-    routing::get,
-    Router,
-};
-use sailfish::TemplateOnce;
-use tower_http::{services::ServeDir, trace::TraceLayer, compression::CompressionLayer};
+use axum::{response::Redirect, routing::get, Router};
+use tower_http::{compression::CompressionLayer, services::ServeDir, trace::TraceLayer};
 
 mod logging;
+mod pages;
 
 #[tokio::main]
 async fn main() -> Result<(), impl Error> {
@@ -16,7 +12,9 @@ async fn main() -> Result<(), impl Error> {
 
     let app = Router::new()
         .nest_service("/assets", ServeDir::new("assets"))
-        .route("/", get(hello))
+        .route("/", get(Redirect::to("/projects")))
+        .nest("/auth", pages::auth::routes())
+        .nest("/projects", pages::projects::routes())
         .layer(TraceLayer::new_for_http())
         .layer(CompressionLayer::new());
 
@@ -25,30 +23,4 @@ async fn main() -> Result<(), impl Error> {
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
-}
-
-#[derive(sailfish::TemplateOnce)]
-#[template(path = "layout.stpl")]
-struct Layout<T: TemplateOnce> {
-    lang: Option<String>,
-    title: String,
-    content: T,
-}
-
-#[derive(sailfish::TemplateOnce)]
-#[template(path = "hello.stpl")]
-struct Hello {
-    messages: Vec<String>,
-}
-
-async fn hello() -> impl IntoResponse {
-    let html = Layout {
-        lang: Some("de".to_string()),
-        title: "Hello, World!".to_string(),
-        content: Hello {
-            messages: vec!["Hello".to_string(), "World".to_string()],
-        },
-    };
-
-    Html(html.render_once().expect("Could not render template"))
 }

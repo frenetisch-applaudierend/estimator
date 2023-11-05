@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<%= lang.unwrap_or("en".to_string()) %>">
+<html lang='<%= lang.unwrap_or("en".to_string()) %>' class="h-full bg-white">
   <head>
     <title><%= title %></title>
     <link href="/assets/style.css" rel="stylesheet">
@@ -9,7 +9,7 @@
     <link rel="manifest" href="/assets/site.webmanifest">
     <script src="/assets/lib/htmx.min.js"></script>
   </head>
-  <body>
+  <body class="h-full" hx-boost="true">
     <%+ content %>
   </body>
 </html>
