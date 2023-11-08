@@ -1,3 +1,0 @@
-<% for msg in &messages { %>
-  <div><%= msg %></div>
-<% } %>

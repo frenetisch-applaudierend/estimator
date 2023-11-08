@@ -1,5 +1,4 @@
 use axum::{
-    http::StatusCode,
     response::{IntoResponse, Redirect},
     routing::get,
     Form, Router,

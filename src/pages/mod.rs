@@ -12,6 +12,12 @@ struct Layout<T: TemplateOnce> {
     content: T,
 }
 
+#[derive(TemplateOnce)]
+#[template(path = "app.html")]
+struct App<T: TemplateOnce> {
+    content: T,
+}
+
 impl<T: TemplateOnce> axum::response::IntoResponse for Layout<T> {
     fn into_response(self) -> axum::response::Response {
         match self.render_once() {
